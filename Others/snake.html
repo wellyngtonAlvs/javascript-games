@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SNAKE</title>
+</head>
+<body>
+</script> 
+	<canvas id="stage" width="600" height="600"></canvas>
+	<script type="text/javascript">
+		
+		window.onload = function(){
+			var stage = document.getElementById('stage');
+			var context = stage.getContext('2d');
+
+			document.addEventListener('keydown', keyPush);
+
+			const velocity = 200;
+			setInterval(game, velocity);
+			
+			const snake = 1;
+			var snakeX = snakeY = 0;
+			var scoreX = 10; 
+			var scoreY = 15;
+			var sizePiece = 20;
+			var pieceQuantity = 30;
+			var appleX = appleY = 15;
+
+			var trail = [];
+			tail = 3;
+
+			function game() {
+				scoreX += snakeX;
+				scoreY += snakeY;
+
+				if (scoreX < 0){
+					scoreX = pieceQuantity - 1;
+				}
+				if (scoreX > pieceQuantity - 1){
+					scoreX = 0;
+				}
+				if (scoreY < 0){
+					scoreY = pieceQuantity - 1;
+				}
+				if (scoreY > pieceQuantity - 1){
+					scoreY = 0;
+				}
+
+				context.fillStyle = 'black';
+				context.fillRect(0,0, stage.width, stage.height);
+
+				context.fillStyle = 'red';
+				context.fillRect(appleX * sizePiece, appleY * sizePiece, sizePiece,sizePiece);
+
+				context.fillStyle = 'gray';
+
+				for (var i = 0; i < trail.length; i++) {
+					context.fillRect(trail[i].x * sizePiece, trail[i].y * sizePiece, sizePiece-1, sizePiece-1);
+					
+					if (trail[i].x == scoreX && trail[i].y == scoreY) {
+						snakeX = snakeY = 0;
+						tail = 3;
+					}
+				}
+
+				trail.push({x:scoreX, y:scoreY})
+				while (trail.length > tail){
+					trail.shift();
+				}
+
+				if (appleX == scoreX && appleY == scoreY){
+				tail ++;
+				appleX = Math.floor(Math.random() * pieceQuantity);
+				appleY = Math.floor(Math.random() * pieceQuantity);
+				}
+
+			}
+
+			function keyPush(event) {
+				switch(event.keyCode) {
+					case 37: // Left
+						snakeX = - snake;
+						snakeY = 0;
+						break;
+
+					case 38: // up
+						snakeX = 0;
+						snakeY = - snake;
+						break;
+
+					case 39: // right
+						snakeX = snake;
+						snakeY = 0;
+						break;
+
+					case 40: // down
+						snakeX = 0;
+						snakeY = snake;
+						break;
+
+					default:
+						break;
+				}
+			}
+		}
+	</script>
+</body>
+</html>
